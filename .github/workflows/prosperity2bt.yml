@@ -28,7 +28,7 @@ jobs:
           for file in $(git diff --name-only HEAD~1); do
             if [[ $file == *.py ]]; then # Ensure it matches your expected file types, now looking for Python files
               echo "Converting $file..."
-              prosperity2bt $file 1
+              prosperity2bt "$file" 1
             fi
           done
         else

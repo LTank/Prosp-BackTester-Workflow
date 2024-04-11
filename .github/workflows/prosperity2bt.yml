@@ -1,0 +1,31 @@
+﻿name: Prosperity2BT Conversion
+
+on:
+  push:
+    paths:
+      - '**/*.py' # Adjust this pattern to match the files you expect
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x' # Specify the Python version you need
+
+    - name: Install prosperity2bt
+      run: pip install -U prosperity2bt
+
+    - name: Find and Convert File
+      run: |
+        for file in $(git diff --name-only HEAD~1); do
+          if [[ $file == *.txt ]]; then # Ensure it matches your expected file types
+            echo "Converting $file..."
+            prosperity2bt $file 1
+          fi
+        done

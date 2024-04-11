@@ -35,6 +35,6 @@ jobs:
           echo "Not enough commits for a diff. Processing all *.py files."
           for file in $(find . -type f -name "*.py"); do
             echo "Converting $file..."
-            prosperity2bt $file 1
+            prosperity2bt "$file" 1
           done
         fi

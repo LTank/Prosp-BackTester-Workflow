@@ -3,7 +3,7 @@
 on:
   push:
     paths:
-      - '**/*.py' # Adjust this pattern to match the files you expect
+      - '**/*.py' # This pattern is for Python files
 
 jobs:
   convert:
@@ -23,9 +23,18 @@ jobs:
 
     - name: Find and Convert File
       run: |
-        for file in $(git diff --name-only HEAD~1); do
-          if [[ $file == *.txt ]]; then # Ensure it matches your expected file types
+        commit_count=$(git rev-list --count HEAD)
+        if [[ $commit_count -gt 1 ]]; then
+          for file in $(git diff --name-only HEAD~1); do
+            if [[ $file == *.py ]]; then # Ensure it matches your expected file types, now looking for Python files
+              echo "Converting $file..."
+              prosperity2bt $file 1
+            fi
+          done
+        else
+          echo "Not enough commits for a diff. Processing all *.py files."
+          for file in $(find . -type f -name "*.py"); do
             echo "Converting $file..."
             prosperity2bt $file 1
-          fi
-        done
+          done
+        fi
